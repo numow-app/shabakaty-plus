@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SHABAKATY PLUS</title><style>
+:root{--bg:#070817;--p:#7c5cff;--c:#20d7e8;--line:#272d4c;--txt:#f7f8ff;--mut:#aab3cf}
+*{box-sizing:border-box}body{margin:0;color:var(--txt);font-family:system-ui,Tahoma;background:radial-gradient(circle at 80% 0,#2c1d65,transparent 38%),radial-gradient(circle at 10% 100%,#064454,transparent 35%),var(--bg);min-height:100vh}.wrap{max-width:1050px;margin:auto;padding:18px}.brand{display:flex;gap:12px;align-items:center;margin-bottom:18px}.logo{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;font-weight:900;font-size:25px;background:linear-gradient(135deg,var(--p),var(--c));box-shadow:0 0 40px #7c5cff55}.brand small{display:block;color:var(--mut);font-size:11px}.hero,.card{background:#11152bd9;border:1px solid var(--line);border-radius:24px;padding:22px;margin-bottom:14px;box-shadow:0 20px 70px #0005;backdrop-filter:blur(15px)}h1{margin:0 0 6px;font-size:28px}h2{margin-top:0}.mut{color:var(--mut)}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field label{display:block;color:var(--mut);font-size:12px;margin-bottom:6px}.field input{width:100%;padding:13px;border-radius:12px;border:1px solid var(--line);background:#080b19;color:#fff}.check{display:flex;gap:8px;margin-top:12px;color:#cbd3e8;font-size:13px}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.btn{border:0;border-radius:12px;padding:12px 17px;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--p),#4b67df)}.green{background:linear-gradient(135deg,#20b778,#31df91)}.status{margin-top:14px;padding:12px;border-radius:13px;background:#080b19;border:1px solid var(--line);color:var(--mut);font-size:13px}.ok{color:#80efb1}.bad{color:#ff899b}table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid var(--line);font-size:12px;text-align:right;white-space:nowrap}td{color:#b9c3dc}.table{overflow:auto}.tag{background:#123b2b;color:#84efb5;border-radius:99px;padding:5px 8px;font-size:10px}.notice{margin-top:13px;color:#c8d0e6;background:#201b40;border:1px solid #4b3e84;padding:12px;border-radius:12px;font-size:12px;line-height:1.8}@media(max-width:700px){.grid{grid-template-columns:1fr}h1{font-size:24px}}
+</style></head><body><div class="wrap">
+<div class="brand"><div class="logo">ش</div><div><b>SHABAKATY PLUS</b><small>Premium Network Management</small></div></div>
+<section class="hero"><h1>📡 MikroTik Hub</h1><div class="mut">ربط حقيقي من خلال الـBackend — ليس مجرد Demo.</div></section>
+<section class="card"><h2>إضافة راوتر</h2><div class="grid">
+<div class="field"><label>اسم الراوتر</label><input id="name" value="My MikroTik"></div>
+<div class="field"><label>IP / Host</label><input id="host" placeholder="192.168.88.1"></div>
+<div class="field"><label>Port</label><input id="port" type="number" value="8729"></div>
+<div class="field"><label>اسم المستخدم</label><input id="user" placeholder="shabakaty"></div>
+<div class="field"><label>كلمة المرور</label><input id="pass" type="password" placeholder="••••••••"></div></div>
+<label class="check"><input id="secure" type="checkbox" checked> استخدام HTTPS / TLS</label>
+<div class="buttons"><button class="btn" onclick="test()">🔗 اختبار الاتصال</button><button class="btn green" onclick="save()">💾 اختبار ثم حفظ</button></div>
+<div id="status" class="status">جاهز.</div>
+<div class="notice">لا تضع كلمة مرور MikroTik أو مفتاح التشفير داخل GitHub. للإنتاج استخدم HTTPS وشهادة TLS صحيحة وقيود وصول مناسبة في الراوتر.</div></section>
+<section class="card"><h2>الراوترات المحفوظة</h2><div class="table"><table><thead><tr><th>الاسم</th><th>IP</th><th>Port</th><th>المستخدم</th><th>الأمان</th><th>الحالة</th></tr></thead><tbody id="list"></tbody></table></div></section>
+</div><script>
+const $=x=>document.getElementById(x), esc=x=>String(x??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+const vals=()=>({name:$("name").value.trim(),host:$("host").value.trim(),port:+$("port").value,username:$("user").value.trim(),password:$("pass").value,secure:$("secure").checked});
+async function api(u,o={}){let r=await fetch(u,{...o,headers:{"Content-Type":"application/json"}}),d=await r.json().catch(()=>({message:"خطأ"}));if(!r.ok)throw Error(d.message||"خطأ");return d}
+function msg(t,ok=true){$("status").innerHTML=`<b class="${ok?"ok":"bad"}">${ok?"🟢":"🔴"} ${esc(t)}</b>`}
+async function test(){try{msg("جارٍ الاتصال...");let d=await api("/api/mikrotik/test",{method:"POST",body:JSON.stringify(vals())});msg(`${d.message} — RouterOS ${d.router.version||"غير معروف"}`)}catch(e){msg(e.message,false)}}
+async function save(){try{msg("جارٍ التحقق ثم الحفظ...");let d=await api("/api/mikrotik/save",{method:"POST",body:JSON.stringify(vals())});msg(`${d.message} — ${d.version||""}`);load()}catch(e){msg(e.message,false)}}
+async function load(){try{let d=await api("/api/mikrotik/routers");$("list").innerHTML=d.routers.length?d.routers.map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.host)}</td><td>${r.port}</td><td>${esc(r.username)}</td><td>${r.secure?"TLS":"HTTP"}</td><td><span class="tag">محفوظ</span></td></tr>`).join(""):`<tr><td colspan="6">لا توجد راوترات.</td></tr>`}catch(e){msg(e.message,false)}}load();
+</script></body></html>
