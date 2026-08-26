@@ -1,28 +1,1224 @@
-<!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SHABAKATY PLUS</title><style>
-:root{--bg:#070817;--p:#7c5cff;--c:#20d7e8;--line:#272d4c;--txt:#f7f8ff;--mut:#aab3cf}
-*{box-sizing:border-box}body{margin:0;color:var(--txt);font-family:system-ui,Tahoma;background:radial-gradient(circle at 80% 0,#2c1d65,transparent 38%),radial-gradient(circle at 10% 100%,#064454,transparent 35%),var(--bg);min-height:100vh}.wrap{max-width:1050px;margin:auto;padding:18px}.brand{display:flex;gap:12px;align-items:center;margin-bottom:18px}.logo{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;font-weight:900;font-size:25px;background:linear-gradient(135deg,var(--p),var(--c));box-shadow:0 0 40px #7c5cff55}.brand small{display:block;color:var(--mut);font-size:11px}.hero,.card{background:#11152bd9;border:1px solid var(--line);border-radius:24px;padding:22px;margin-bottom:14px;box-shadow:0 20px 70px #0005;backdrop-filter:blur(15px)}h1{margin:0 0 6px;font-size:28px}h2{margin-top:0}.mut{color:var(--mut)}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field label{display:block;color:var(--mut);font-size:12px;margin-bottom:6px}.field input{width:100%;padding:13px;border-radius:12px;border:1px solid var(--line);background:#080b19;color:#fff}.check{display:flex;gap:8px;margin-top:12px;color:#cbd3e8;font-size:13px}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.btn{border:0;border-radius:12px;padding:12px 17px;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--p),#4b67df)}.green{background:linear-gradient(135deg,#20b778,#31df91)}.status{margin-top:14px;padding:12px;border-radius:13px;background:#080b19;border:1px solid var(--line);color:var(--mut);font-size:13px}.ok{color:#80efb1}.bad{color:#ff899b}table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid var(--line);font-size:12px;text-align:right;white-space:nowrap}td{color:#b9c3dc}.table{overflow:auto}.tag{background:#123b2b;color:#84efb5;border-radius:99px;padding:5px 8px;font-size:10px}.notice{margin-top:13px;color:#c8d0e6;background:#201b40;border:1px solid #4b3e84;padding:12px;border-radius:12px;font-size:12px;line-height:1.8}@media(max-width:700px){.grid{grid-template-columns:1fr}h1{font-size:24px}}
-</style></head><body><div class="wrap">
-<div class="brand"><div class="logo">ش</div><div><b>SHABAKATY PLUS</b><small>Premium Network Management</small></div></div>
-<section class="hero"><h1>📡 MikroTik Hub</h1><div class="mut">ربط حقيقي من خلال الـBackend — ليس مجرد Demo.</div></section>
-<section class="card"><h2>إضافة راوتر</h2><div class="grid">
-<div class="field"><label>اسم الراوتر</label><input id="name" value="My MikroTik"></div>
-<div class="field"><label>IP / Host</label><input id="host" placeholder="192.168.88.1"></div>
-<div class="field"><label>Port</label><input id="port" type="number" value="8729"></div>
-<div class="field"><label>اسم المستخدم</label><input id="user" placeholder="shabakaty"></div>
-<div class="field"><label>كلمة المرور</label><input id="pass" type="password" placeholder="••••••••"></div></div>
-<label class="check"><input id="secure" type="checkbox" checked> استخدام HTTPS / TLS</label>
-<div class="buttons"><button class="btn" onclick="test()">🔗 اختبار الاتصال</button><button class="btn green" onclick="save()">💾 اختبار ثم حفظ</button></div>
-<div id="status" class="status">جاهز.</div>
-<div class="notice">لا تضع كلمة مرور MikroTik أو مفتاح التشفير داخل GitHub. للإنتاج استخدم HTTPS وشهادة TLS صحيحة وقيود وصول مناسبة في الراوتر.</div></section>
-<section class="card"><h2>الراوترات المحفوظة</h2><div class="table"><table><thead><tr><th>الاسم</th><th>IP</th><th>Port</th><th>المستخدم</th><th>الأمان</th><th>الحالة</th></tr></thead><tbody id="list"></tbody></table></div></section>
-</div><script>
-const $=x=>document.getElementById(x), esc=x=>String(x??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
-const vals=()=>({name:$("name").value.trim(),host:$("host").value.trim(),port:+$("port").value,username:$("user").value.trim(),password:$("pass").value,secure:$("secure").checked});
-async function api(u,o={}){let r=await fetch(u,{...o,headers:{"Content-Type":"application/json"}}),d=await r.json().catch(()=>({message:"خطأ"}));if(!r.ok)throw Error(d.message||"خطأ");return d}
-function msg(t,ok=true){$("status").innerHTML=`<b class="${ok?"ok":"bad"}">${ok?"🟢":"🔴"} ${esc(t)}</b>`}
-async function test(){try{msg("جارٍ الاتصال...");let d=await api("/api/mikrotik/test",{method:"POST",body:JSON.stringify(vals())});msg(`${d.message} — RouterOS ${d.router.version||"غير معروف"}`)}catch(e){msg(e.message,false)}}
-async function save(){try{msg("جارٍ التحقق ثم الحفظ...");let d=await api("/api/mikrotik/save",{method:"POST",body:JSON.stringify(vals())});msg(`${d.message} — ${d.version||""}`);load()}catch(e){msg(e.message,false)}}
-async function load(){try{let d=await api("/api/mikrotik/routers");$("list").innerHTML=d.routers.length?d.routers.map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.host)}</td><td>${r.port}</td><td>${esc(r.username)}</td><td>${r.secure?"TLS":"HTTP"}</td><td><span class="tag">محفوظ</span></td></tr>`).join(""):`<tr><td colspan="6">لا توجد راوترات.</td></tr>`}catch(e){msg(e.message,false)}}load();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>شبكتي بلس</title>
+
+<style>
+:root{
+  --bg:#070817;
+  --panel:#0e1226;
+  --panel2:#111733;
+  --primary:#7c5cff;
+  --cyan:#20d7e8;
+  --green:#22d69b;
+  --red:#ff5577;
+  --yellow:#ffc857;
+  --text:#f7f8ff;
+  --muted:#8f97b5;
+  --line:#252b4b;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,"Tahoma",sans-serif;
+}
+
+body{
+  background:
+    radial-gradient(circle at 10% 10%,rgba(124,92,255,.16),transparent 30%),
+    radial-gradient(circle at 90% 20%,rgba(32,215,232,.10),transparent 28%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+button,input{
+  font-family:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:260px;
+  background:rgba(10,13,31,.95);
+  border-left:1px solid var(--line);
+  padding:22px 15px;
+  position:fixed;
+  right:0;
+  top:0;
+  bottom:0;
+  z-index:20;
+  backdrop-filter:blur(18px);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 10px 25px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:20px;
+}
+
+.logo-icon{
+  width:45px;
+  height:45px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--primary),var(--cyan));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  font-weight:bold;
+  box-shadow:0 0 25px rgba(124,92,255,.35);
+}
+
+.logo h1{
+  font-size:19px;
+}
+
+.logo span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.nav button{
+  border:0;
+  background:transparent;
+  color:#aeb5d0;
+  padding:14px;
+  border-radius:13px;
+  text-align:right;
+  font-size:14px;
+  transition:.2s;
+}
+
+.nav button:hover,
+.nav button.active{
+  color:white;
+  background:linear-gradient(90deg,rgba(124,92,255,.23),rgba(32,215,232,.08));
+  border:1px solid rgba(124,92,255,.25);
+}
+
+.bottom-side{
+  position:absolute;
+  bottom:20px;
+  right:15px;
+  left:15px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:13px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* MAIN */
+.main{
+  flex:1;
+  margin-right:260px;
+  padding:25px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:28px;
+}
+
+.menu-btn{
+  display:none;
+  background:var(--panel);
+  border:1px solid var(--line);
+  color:white;
+  border-radius:10px;
+  padding:10px 13px;
+}
+
+.top-title h2{
+  font-size:25px;
+}
+
+.top-title p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:6px;
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--panel);
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.avatar{
+  width:35px;
+  height:35px;
+  border-radius:11px;
+  background:linear-gradient(135deg,var(--primary),var(--cyan));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+/* CARDS */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+
+.card{
+  background:linear-gradient(145deg,rgba(17,23,51,.95),rgba(11,15,34,.95));
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+}
+
+.card:before{
+  content:"";
+  position:absolute;
+  width:100px;
+  height:100px;
+  background:var(--primary);
+  filter:blur(60px);
+  opacity:.12;
+  left:-20px;
+  top:-20px;
+}
+
+.card-label{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.card-value{
+  font-size:30px;
+  font-weight:bold;
+  margin:12px 0 5px;
+}
+
+.card-info{
+  font-size:12px;
+  color:var(--green);
+}
+
+/* SECTION */
+.section{
+  margin-top:25px;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.section-head h3{
+  font-size:18px;
+}
+
+.add-btn{
+  background:linear-gradient(135deg,var(--primary),#5e45e8);
+  color:white;
+  border:0;
+  border-radius:12px;
+  padding:11px 17px;
+  font-weight:bold;
+  box-shadow:0 8px 25px rgba(124,92,255,.2);
+}
+
+.add-btn:hover{
+  transform:translateY(-1px);
+}
+
+/* ROUTERS */
+.router-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.router{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:18px;
+}
+
+.router-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.router-icon{
+  width:43px;
+  height:43px;
+  border-radius:12px;
+  background:rgba(124,92,255,.14);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:21px;
+}
+
+.status{
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+  background:rgba(34,214,155,.1);
+  color:var(--green);
+}
+
+.status.off{
+  background:rgba(255,85,119,.1);
+  color:var(--red);
+}
+
+.router-name{
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.router-ip{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.router-actions{
+  display:flex;
+  gap:8px;
+  margin-top:17px;
+}
+
+.small-btn{
+  flex:1;
+  background:#171d3b;
+  border:1px solid var(--line);
+  color:white;
+  border-radius:9px;
+  padding:9px;
+  font-size:12px;
+}
+
+.small-btn.delete{
+  color:var(--red);
+}
+
+/* ACTIVITY */
+.activity{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:17px;
+  overflow:hidden;
+}
+
+.activity-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.activity-row:last-child{
+  border-bottom:0;
+}
+
+.activity-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.activity-icon{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:#171d3b;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.activity small{
+  color:var(--muted);
+}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+  backdrop-filter:blur(8px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:480px;
+  background:#0d1125;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:24px;
+  box-shadow:0 25px 80px rgba(0,0,0,.5);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+}
+
+.close{
+  border:0;
+  background:#171d3b;
+  color:white;
+  width:35px;
+  height:35px;
+  border-radius:10px;
+}
+
+.field{
+  margin-bottom:15px;
+}
+
+.field label{
+  display:block;
+  font-size:12px;
+  color:#aeb5d0;
+  margin-bottom:7px;
+}
+
+.field input{
+  width:100%;
+  background:#080c1d;
+  color:white;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:13px;
+  outline:none;
+  direction:ltr;
+}
+
+.field input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(124,92,255,.08);
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.cancel{
+  flex:1;
+  background:#171d3b;
+  color:white;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:12px;
+}
+
+.save{
+  flex:1;
+  background:linear-gradient(135deg,var(--primary),var(--cyan));
+  color:white;
+  border:0;
+  border-radius:11px;
+  padding:12px;
+  font-weight:bold;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  bottom:25px;
+  left:25px;
+  background:#111733;
+  border:1px solid var(--line);
+  padding:14px 18px;
+  border-radius:12px;
+  display:none;
+  z-index:200;
+  box-shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+.toast.show{
+  display:block;
+}
+
+/* MOBILE */
+@media(max-width:1000px){
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .router-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:700px){
+  .sidebar{
+    transform:translateX(100%);
+    transition:.25s;
+    box-shadow:-20px 0 60px rgba(0,0,0,.4);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-right:0;
+    padding:16px;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .topbar{
+    gap:10px;
+  }
+
+  .top-title h2{
+    font-size:20px;
+  }
+
+  .profile{
+    display:none;
+  }
+
+  .cards{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .card{
+    padding:15px;
+  }
+
+  .card-value{
+    font-size:24px;
+  }
+
+  .router-grid{
+    grid-template-columns:1fr;
+  }
+
+  .section-head{
+    align-items:flex-start;
+    gap:10px;
+  }
+
+  .add-btn{
+    padding:9px 12px;
+    font-size:12px;
+  }
+}
+
+@media(max-width:430px){
+  .cards{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">ش</div>
+      <div>
+        <h1>شبكتي بلس</h1>
+        <span>إدارة شبكتك باحتراف</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+
+      <button class="active" onclick="showSection('dashboard',this)">
+        🏠 لوحة التحكم
+      </button>
+
+      <button onclick="showSection('routers',this)">
+        📡 الراوترات
+      </button>
+
+      <button onclick="showSection('cards',this)">
+        🎫 الكروت
+      </button>
+
+      <button onclick="showSection('sales',this)">
+        💰 المبيعات
+      </button>
+
+      <button onclick="showSection('inventory',this)">
+        📦 المخزون
+      </button>
+
+      <button onclick="showSection('settings',this)">
+        ⚙️ الإعدادات
+      </button>
+
+    </nav>
+
+    <div class="bottom-side">
+      <div>الإصدار التجريبي</div>
+      <strong style="color:white">10 أيام مجانية</strong>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="topbar">
+
+      <button class="menu-btn" onclick="toggleSidebar()">
+        ☰
+      </button>
+
+      <div class="top-title">
+        <h2>لوحة التحكم</h2>
+        <p>مرحباً بك في شبكتي بلس 👋</p>
+      </div>
+
+      <div class="profile">
+        <div class="avatar">ش</div>
+        <div>
+          <div style="font-size:13px">المدير</div>
+          <small style="color:var(--muted)">Admin</small>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard">
+
+      <div class="cards">
+
+        <div class="card">
+          <div class="card-label">إجمالي الراوترات</div>
+          <div class="card-value" id="routerCount">0</div>
+          <div class="card-info">● النظام يعمل</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">الكروت المباعة</div>
+          <div class="card-value" id="soldCount">0</div>
+          <div class="card-info">هذا الشهر</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">إجمالي الأرباح</div>
+          <div class="card-value" id="profit">0</div>
+          <div class="card-info">ريال</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">الكروت المتوفرة</div>
+          <div class="card-value" id="stockCount">0</div>
+          <div class="card-info">في المخزون</div>
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <div class="section-head">
+          <h3>الراوترات</h3>
+
+          <button class="add-btn" onclick="openRouterModal()">
+            ＋ إضافة راوتر
+          </button>
+        </div>
+
+        <div class="router-grid" id="routerGrid"></div>
+
+      </div>
+
+      <div class="section">
+
+        <div class="section-head">
+          <h3>آخر العمليات</h3>
+        </div>
+
+        <div class="activity">
+
+          <div class="activity-row">
+            <div class="activity-left">
+              <div class="activity-icon">📡</div>
+              <div>
+                <div>تم فتح لوحة التحكم</div>
+                <small>الآن</small>
+              </div>
+            </div>
+            <span style="color:var(--green)">ناجح</span>
+          </div>
+
+          <div class="activity-row">
+            <div class="activity-left">
+              <div class="activity-icon">🔐</div>
+              <div>
+                <div>تم تسجيل الدخول للنظام</div>
+                <small>اليوم</small>
+              </div>
+            </div>
+            <span style="color:var(--green)">ناجح</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- OTHER SECTIONS -->
+    <section id="routers" style="display:none">
+      <div class="section-head">
+        <h3>إدارة الراوترات</h3>
+        <button class="add-btn" onclick="openRouterModal()">＋ إضافة راوتر</button>
+      </div>
+      <div class="router-grid" id="routerGrid2"></div>
+    </section>
+
+    <section id="cards" style="display:none">
+      <div class="card">
+        <h3>🎫 إدارة الكروت</h3>
+        <p style="color:var(--muted);margin-top:10px">
+          سيتم إضافة نظام إنشاء وطباعة الكروت في الخطوة التالية.
+        </p>
+      </div>
+    </section>
+
+    <section id="sales" style="display:none">
+      <div class="card">
+        <h3>💰 المبيعات</h3>
+        <p style="color:var(--muted);margin-top:10px">
+          نظام المبيعات جاهز للربط مع قاعدة البيانات.
+        </p>
+      </div>
+    </section>
+
+    <section id="inventory" style="display:none">
+      <div class="card">
+        <h3>📦 المخزون</h3>
+        <p style="color:var(--muted);margin-top:10px">
+          إدارة المخزون والمخروجات ستكون هنا.
+        </p>
+      </div>
+    </section>
+
+    <section id="settings" style="display:none">
+      <div class="card">
+        <h3>⚙️ الإعدادات</h3>
+        <p style="color:var(--muted);margin-top:10px">
+          إعدادات الحساب والنظام.
+        </p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ROUTER MODAL -->
+<div class="modal" id="routerModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+      <div>
+        <h3>إضافة راوتر</h3>
+        <p style="color:var(--muted);font-size:12px;margin-top:5px">
+          أضف بيانات MikroTik
+        </p>
+      </div>
+
+      <button class="close" onclick="closeRouterModal()">×</button>
+    </div>
+
+    <div class="field">
+      <label>اسم الراوتر</label>
+      <input id="routerName" type="text"
+             placeholder="مثال: راوتر الفرع الرئيسي"
+             dir="rtl">
+    </div>
+
+    <div class="field">
+      <label>IP Address</label>
+      <input id="routerIP" type="text"
+             placeholder="192.168.88.1">
+    </div>
+
+    <div class="field">
+      <label>اسم المستخدم</label>
+      <input id="routerUser" type="text"
+             placeholder="admin">
+    </div>
+
+    <div class="field">
+      <label>كلمة المرور</label>
+      <input id="routerPass" type="password"
+             placeholder="••••••••">
+    </div>
+
+    <div class="modal-actions">
+
+      <button class="cancel" onclick="closeRouterModal()">
+        إلغاء
+      </button>
+
+      <button class="save" onclick="saveRouter()">
+        حفظ الراوتر
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================
+   DATA
+========================= */
+
+let routers = JSON.parse(
+  localStorage.getItem("shabakaty_routers") || "[]"
+);
+
+/* =========================
+   INITIALIZE
+========================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderRouters();
+  updateStats();
+});
+
+/* =========================
+   SIDEBAR
+========================= */
+
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+/* =========================
+   SECTION NAVIGATION
+========================= */
+
+function showSection(id, button){
+
+  const sections = [
+    "dashboard",
+    "routers",
+    "cards",
+    "sales",
+    "inventory",
+    "settings"
+  ];
+
+  sections.forEach(section => {
+    const el = document.getElementById(section);
+
+    if(el){
+      el.style.display =
+        section === id ? "block" : "none";
+    }
+  });
+
+  document.querySelectorAll(".nav button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  if(button){
+    button.classList.add("active");
+  }
+
+  if(window.innerWidth <= 700){
+    document.getElementById("sidebar")
+      .classList.remove("open");
+  }
+}
+
+/* =========================
+   MODAL
+========================= */
+
+function openRouterModal(){
+
+  document.getElementById("routerModal")
+    .classList.add("show");
+
+  document.getElementById("routerName").focus();
+}
+
+function closeRouterModal(){
+
+  document.getElementById("routerModal")
+    .classList.remove("show");
+
+  clearRouterForm();
+}
+
+function clearRouterForm(){
+
+  document.getElementById("routerName").value = "";
+  document.getElementById("routerIP").value = "";
+  document.getElementById("routerUser").value = "";
+  document.getElementById("routerPass").value = "";
+}
+
+/* =========================
+   SAVE ROUTER
+========================= */
+
+function saveRouter(){
+
+  const name =
+    document.getElementById("routerName").value.trim();
+
+  const ip =
+    document.getElementById("routerIP").value.trim();
+
+  const username =
+    document.getElementById("routerUser").value.trim();
+
+  const password =
+    document.getElementById("routerPass").value;
+
+  if(!name){
+    showToast("اكتب اسم الراوتر");
+    return;
+  }
+
+  if(!ip){
+    showToast("اكتب IP الراوتر");
+    return;
+  }
+
+  if(!username){
+    showToast("اكتب اسم المستخدم");
+    return;
+  }
+
+  if(!password){
+    showToast("اكتب كلمة المرور");
+    return;
+  }
+
+  const router = {
+    id:Date.now(),
+    name:name,
+    ip:ip,
+    username:username,
+    password:password,
+    online:true,
+    createdAt:new Date().toLocaleString("ar-YE")
+  };
+
+  routers.push(router);
+
+  localStorage.setItem(
+    "shabakaty_routers",
+    JSON.stringify(routers)
+  );
+
+  closeRouterModal();
+
+  renderRouters();
+  updateStats();
+
+  showToast("تمت إضافة الراوتر بنجاح ✓");
+}
+
+/* =========================
+   RENDER ROUTERS
+========================= */
+
+function renderRouters(){
+
+  const grids = [
+    document.getElementById("routerGrid"),
+    document.getElementById("routerGrid2")
+  ];
+
+  const html = routers.length
+    ? routers.map(router => `
+
+      <div class="router">
+
+        <div class="router-top">
+
+          <div class="router-icon">
+            📡
+          </div>
+
+          <span class="status ${router.online ? "" : "off"}">
+            ${router.online ? "● متصل" : "● غير متصل"}
+          </span>
+
+        </div>
+
+        <div class="router-name">
+          ${escapeHTML(router.name)}
+        </div>
+
+        <div class="router-ip">
+          IP: ${escapeHTML(router.ip)}
+        </div>
+
+        <div style="
+          margin-top:7px;
+          color:#727b9c;
+          font-size:11px;
+        ">
+          المستخدم: ${escapeHTML(router.username)}
+        </div>
+
+        <div class="router-actions">
+
+          <button
+            class="small-btn"
+            onclick="testRouter(${router.id})">
+            اختبار الاتصال
+          </button>
+
+          <button
+            class="small-btn delete"
+            onclick="deleteRouter(${router.id})">
+            حذف
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("")
+    : `
+
+      <div class="card" style="grid-column:1/-1;text-align:center">
+
+        <div style="font-size:40px;margin-bottom:12px">
+          📡
+        </div>
+
+        <h3>لا يوجد راوتر</h3>
+
+        <p style="
+          color:var(--muted);
+          margin:8px 0 17px;
+          font-size:13px;
+        ">
+          أضف أول راوتر لبدء إدارة شبكتك.
+        </p>
+
+        <button class="add-btn"
+                onclick="openRouterModal()">
+          ＋ إضافة أول راوتر
+        </button>
+
+      </div>
+
+    `;
+
+  grids.forEach(grid => {
+    if(grid) grid.innerHTML = html;
+  });
+}
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteRouter(id){
+
+  const router =
+    routers.find(r => r.id === id);
+
+  if(!router) return;
+
+  const confirmed =
+    confirm("هل تريد حذف الراوتر " + router.name + "؟");
+
+  if(!confirmed) return;
+
+  routers =
+    routers.filter(r => r.id !== id);
+
+  localStorage.setItem(
+    "shabakaty_routers",
+    JSON.stringify(routers)
+  );
+
+  renderRouters();
+  updateStats();
+
+  showToast("تم حذف الراوتر");
+}
+
+/* =========================
+   TEST
+========================= */
+
+function testRouter(id){
+
+  const router =
+    routers.find(r => r.id === id);
+
+  if(!router) return;
+
+  /*
+    ملاحظة:
+    هذا اختبار تجريبي للواجهة فقط.
+    الاتصال الحقيقي بـ MikroTik يحتاج Backend/API.
+  */
+
+  showToast(
+    "جارٍ اختبار " + router.ip + "..."
+  );
+
+  setTimeout(() => {
+
+    showToast(
+      "واجهة الاتصال جاهزة — الربط الحقيقي يحتاج Backend"
+    );
+
+  },1200);
+}
+
+/* =========================
+   STATS
+========================= */
+
+function updateStats(){
+
+  document.getElementById("routerCount")
+    .textContent = routers.length;
+
+  document.getElementById("soldCount")
+    .textContent = "0";
+
+  document.getElementById("profit")
+    .textContent = "0";
+
+  document.getElementById("stockCount")
+    .textContent = "0";
+}
+
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(() => {
+      toast.classList.remove("show");
+    },3000);
+}
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+/* =========================
+   CLOSE MODAL OUTSIDE
+========================= */
+
+document.getElementById("routerModal")
+  .addEventListener("click", function(e){
+
+    if(e.target === this){
+      closeRouterModal();
+    }
+
+  });
+
+/* =========================
+   ESC KEY
+========================= */
+
+document.addEventListener("keydown", function(e){
+
+  if(e.key === "Escape"){
+    closeRouterModal();
+  }
+
+});
+</script>
+
+</body>
+</html>
