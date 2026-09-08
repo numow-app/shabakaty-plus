@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#070817">
+<title>شبكتي بلس</title>
+
+<style>
+:root{
+  --bg:#070817;
+  --panel:#0e1226;
+  --panel2:#111733;
+  --primary:#7c5cff;
+  --cyan:#20d7e8;
+  --green:#22d69b;
+  --red:#ff5577;
+  --yellow:#ffc857;
+  --text:#f7f8ff;
+  --muted:#8f97b5;
+  --line:#252b4b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,Tahoma,sans-serif;
+  background:
+  radial-gradient(circle at 10% 10%,rgba(124,92,255,.18),transparent 30%),
+  radial-gradient(circle at 90% 20%,rgba(32,215,232,.10),transparent 30%),
+  var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+
+.app{display:flex;min-height:100vh}
+
+.sidebar{
+  width:260px;
+  position:fixed;
+  right:0;
+  top:0;
+  bottom:0;
+  z-index:50;
+  background:rgba(10,13,31,.97);
+  border-left:1px solid var(--line);
+  padding:20px 14px;
+  backdrop-filter:blur(18px);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 8px 22px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:18px;
+}
+
+.logoIcon{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  background:linear-gradient(135deg,var(--primary),var(--cyan));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:27px;
+  font-weight:bold;
+  box-shadow:0 0 30px rgba(124,92,255,.35);
+}
+
+.logo h1{font-size:19px}
+.logo span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.nav button{
+  border:1px solid transparent;
+  background:transparent;
+  color:#aeb5d0;
+  padding:13px;
+  border-radius:13px;
+  text-align:right;
+  font-size:14px;
+}
+
+.nav button:hover,
+.nav button.active{
+  color:white;
+  background:linear-gradient(
+    90deg,
+    rgba(124,92,255,.25),
+    rgba(32,215,232,.08)
+  );
+  border-color:rgba(124,92,255,.25);
+}
+
+.sideBottom{
+  position:absolute;
+  right:14px;
+  left:14px;
+  bottom:18px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:13px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.main{
+  flex:1;
+  margin-right:260px;
+  padding:24px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.menu{
+  display:none;
+  background:var(--panel);
+  border:1px solid var(--line);
+  color:white;
+  border-radius:11px;
+  padding:10px 13px;
+}
+
+.title h2{font-size:25px}
+.title p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:8px 12px;
+  border-radius:14px;
+}
+
+.avatar{
+  width:36px;
+  height:36px;
+  border-radius:11px;
+  background:linear-gradient(135deg,var(--primary),var(--cyan));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.page{display:none}
+.page.active{display:block}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+.stat{
+  background:linear-gradient(145deg,#111733,#0b0f22);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:19px;
+  position:relative;
+  overflow:hidden;
+}
+
+.stat:after{
+  content:"";
+  position:absolute;
+  width:90px;
+  height:90px;
+  left:-35px;
+  bottom:-45px;
+  border-radius:50%;
+  background:rgba(124,92,255,.12);
+}
+
+.stat small{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.stat strong{
+  display:block;
+  font-size:27px;
+  margin-top:9px;
+}
+
+.stat .icon{
+  position:absolute;
+  left:15px;
+  top:15px;
+  font-size:24px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1.4fr .8fr;
+  gap:16px;
+  margin-top:17px;
+}
+
+.panel{
+  background:rgba(14,18,38,.92);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+}
+
+.panelHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px;
+}
+
+.panelHeader h3{font-size:16px}
+
+.btn{
+  border:0;
+  border-radius:11px;
+  padding:10px 14px;
+  color:white;
+  background:linear-gradient(135deg,var(--primary),#5b48d8);
+  font-weight:bold;
+}
+
+.btn.cyan{
+  background:linear-gradient(135deg,var(--cyan),#168fa0);
+}
+
+.btn.green{
+  background:linear-gradient(135deg,var(--green),#149a72);
+}
+
+.btn.red{
+  background:linear-gradient(135deg,var(--red),#c83b5c);
+}
+
+.btn.secondary{
+  background:#181e3a;
+  border:1px solid var(--line);
+}
+
+.formGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.field label{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.field input,
+.field select,
+.field textarea,
+.search{
+  width:100%;
+  background:#080c1d;
+  color:white;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:12px;
+  outline:none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.search:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(124,92,255,.10);
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:15px;
+}
+
+.status{
+  padding:14px;
+  border-radius:13px;
+  background:#080c1d;
+  border:1px solid var(--line);
+  color:var(--muted);
+  margin-top:12px;
+}
+
+.status.ok{
+  color:var(--green);
+  border-color:rgba(34,214,155,.25);
+}
+
+.status.bad{
+  color:var(--red);
+  border-color:rgba(255,85,119,.25);
+}
+
+.searchBox{
+  display:flex;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.tableWrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+
+th,td{
+  padding:12px;
+  text-align:right;
+  border-bottom:1px solid var(--line);
+  font-size:13px;
+}
+
+th{
+  color:#b8bfd8;
+  background:#0b1023;
+}
+
+td{color:#eef0fa}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+}
+
+.badge.green{
+  color:#6ff2c4;
+  background:rgba(34,214,155,.10);
+}
+
+.badge.red{
+  color:#ff839b;
+  background:rgba(255,85,119,.10);
+}
+
+.badge.yellow{
+  color:#ffd976;
+  background:rgba(255,200,87,.10);
+}
+
+.routerCard{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#0a0e20;
+  margin-bottom:10px;
+}
+
+.routerInfo strong{display:block}
+.routerInfo small{
+  color:var(--muted);
+  display:block;
+  margin-top:5px;
+}
+
+.quick{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.quick button{
+  min-height:90px;
+  border-radius:15px;
+  border:1px solid var(--line);
+  background:#0b1023;
+  color:white;
+  font-size:14px;
+}
+
+.quick button:hover{
+  border-color:var(--primary);
+  transform:translateY(-2px);
+}
+
+.ai{
+  background:
+  radial-gradient(circle at 80% 20%,rgba(32,215,232,.15),transparent 35%),
+  linear-gradient(135deg,rgba(124,92,255,.18),rgba(14,18,38,.95));
+}
+
+.aiTitle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.aiIcon{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--primary),var(--cyan));
+}
+
+.aiResponse{
+  min-height:80px;
+  color:#dce1f5;
+  line-height:1.8;
+  font-size:13px;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:35px;
+}
+
+.toast{
+  position:fixed;
+  left:20px;
+  bottom:20px;
+  z-index:100;
+  background:#111733;
+  border:1px solid var(--line);
+  padding:13px 16px;
+  border-radius:13px;
+  box-shadow:0 15px 50px rgba(0,0,0,.4);
+  display:none;
+}
+
+@media(max-width:1000px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:1fr}
+}
+
+@media(max-width:750px){
+  .sidebar{
+    transform:translateX(110%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-right:0;
+    padding:15px;
+  }
+
+  .menu{display:block}
+
+  .topbar{
+    align-items:flex-start;
+  }
+
+  .profile{display:none}
+
+  .topbar .title h2{font-size:20px}
+
+  .stats{grid-template-columns:1fr 1fr}
+
+  .formGrid{grid-template-columns:1fr}
+
+  .quick{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr}
+  .quick{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+    <div class="logoIcon">ش</div>
+    <div>
+      <h1>شبكتي بلس</h1>
+      <span>شبكتك، أرباحك، بين يديك</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <button class="active" onclick="showPage('dashboard',this)">
+      📊 لوحة التحكم
+    </button>
+
+    <button onclick="showPage('smart',this)">
+      🔎 بحث الكرت الذكي
+    </button>
+
+    <button onclick="showPage('cards',this)">
+      🎫 إدارة الكروت
+    </button>
+
+    <button onclick="showPage('routers',this)">
+      📡 أجهزة MikroTik
+    </button>
+
+    <button onclick="showPage('expenses',this)">
+      💰 المخروجات
+    </button>
+
+    <button onclick="showPage('ai',this)">
+      ✨ مساعد شبكتي AI
+    </button>
+
+  </nav>
+
+  <div class="sideBottom">
+    <div>الإصدار</div>
+    <strong style="color:white">SHABAKATY PLUS 1.0</strong>
+  </div>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+  <div style="display:flex;align-items:center;gap:12px">
+
+    <button class="menu" onclick="toggleMenu()">☰</button>
+
+    <div class="title">
+      <h2 id="pageTitle">لوحة التحكم</h2>
+      <p>إدارة شبكتك وأرباحك من مكان واحد</p>
+    </div>
+
+  </div>
+
+  <div class="profile">
+    <div class="avatar">ش</div>
+    <div>
+      <strong>مالك الشبكة</strong>
+      <div style="font-size:11px;color:var(--muted)">Owner</div>
+    </div>
+  </div>
+
+</header>
+
+
+<!-- DASHBOARD -->
+
+<section class="page active" id="dashboard">
+
+  <div class="stats">
+
+    <div class="stat">
+      <small>إجمالي الكروت</small>
+      <strong id="totalCards">0</strong>
+      <span class="icon">🎫</span>
+    </div>
+
+    <div class="stat">
+      <small>قيمة المبيعات</small>
+      <strong id="totalSales">0</strong>
+      <span class="icon">💵</span>
+    </div>
+
+    <div class="stat">
+      <small>المخروجات</small>
+      <strong id="totalExpenses">0</strong>
+      <span class="icon">📉</span>
+    </div>
+
+    <div class="stat">
+      <small>صافي الربح</small>
+      <strong id="netProfit">0</strong>
+      <span class="icon">📈</span>
+    </div>
+
+  </div>
+
+
+  <div class="grid">
+
+    <div class="panel">
+
+      <div class="panelHeader">
+        <h3>⚡ إجراءات سريعة</h3>
+      </div>
+
+      <div class="quick">
+
+        <button onclick="showPageByName('cards')">
+          🎫<br><br>إضافة كرت
+        </button>
+
+        <button onclick="showPageByName('smart')">
+          🔎<br><br>بحث كرت ذكي
+        </button>
+
+        <button onclick="showPageByName('routers')">
+          📡<br><br>إضافة راوتر
+        </button>
+
+        <button onclick="showPageByName('expenses')">
+          💰<br><br>إضافة مخروج
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="panel ai">
+
+      <div class="aiTitle">
+        <div class="aiIcon">✨</div>
+        <div>
+          <h3>مساعد شبكتي AI</h3>
+          <small style="color:var(--muted)">
+            تحليل سريع لبيانات شبكتك
+          </small>
+        </div>
+      </div>
+
+      <div class="aiResponse" id="dashboardAI">
+        اضغط الزر لتحليل الشبكة.
+      </div>
+
+      <button class="btn" onclick="analyzeDashboard()">
+        🤖 تحليل شبكتي
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="panel" style="margin-top:17px">
+
+    <div class="panelHeader">
+      <h3>📡 حالة أجهزة MikroTik</h3>
+      <button class="btn secondary" onclick="loadRouters()">تحديث</button>
+    </div>
+
+    <div id="dashboardRouters">
+      <div class="empty">جاري تحميل الأجهزة...</div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- SMART SEARCH -->
+
+<section class="page" id="smart">
+
+  <div class="panel">
+
+    <div class="panelHeader">
+      <h3>🔎 بحث الكرت الذكي</h3>
+      <span class="badge green">SMART SEARCH</span>
+    </div>
+
+    <div class="searchBox">
+
+      <input
+        id="smartSearch"
+        class="search"
+        placeholder="ابحث برقم الكرت أو Username أو اسم العميل..."
+        oninput="searchCards()"
+      >
+
+    </div>
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>العميل</th>
+            <th>الباقة</th>
+            <th>السرعة</th>
+            <th>السعر</th>
+            <th>تاريخ الإنشاء</th>
+            <th>الحالة</th>
+          </tr>
+        </thead>
+
+        <tbody id="smartResults"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CARDS -->
+
+<section class="page" id="cards">
+
+  <div class="grid">
+
+    <div class="panel">
+
+      <div class="panelHeader">
+        <h3>🎫 إنشاء كرت</h3>
+      </div>
+
+      <div class="formGrid">
+
+        <div class="field">
+          <label>Username</label>
+          <input id="cardUsername" placeholder="مثال: user1001">
+        </div>
+
+        <div class="field">
+          <label>كلمة المرور</label>
+          <input id="cardPassword" placeholder="Password">
+        </div>
+
+        <div class="field">
+          <label>اسم العميل</label>
+          <input id="cardCustomer" placeholder="اسم العميل">
+        </div>
+
+        <div class="field">
+          <label>السعر</label>
+          <input id="cardPrice" type="number" value="0">
+        </div>
+
+        <div class="field">
+          <label>مدة الاشتراك</label>
+          <input id="cardDuration" placeholder="30 يوم">
+        </div>
+
+        <div class="field">
+          <label>السرعة</label>
+          <input id="cardSpeed" placeholder="5M">
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <button class="btn green" onclick="createCard()">
+          إضافة الكرت
+        </button>
+
+        <button class="btn secondary" onclick="generateCard()">
+          ✨ توليد بيانات
+        </button>
+      </div>
+
+      <div id="cardStatus" class="status">
+        جاهز لإضافة كرت جديد.
+      </div>
+
+    </div>
+
+
+    <div class="panel">
+
+      <div class="panelHeader">
+        <h3>📦 مخزون الكروت</h3>
+      </div>
+
+      <div style="text-align:center;padding:20px">
+
+        <div style="font-size:48px">🎫</div>
+
+        <strong style="font-size:32px" id="inventoryCount">
+          0
+        </strong>
+
+        <div style="color:var(--muted);margin-top:5px">
+          كرت مسجل
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="panel" style="margin-top:17px">
+
+    <div class="panelHeader">
+      <h3>📋 آخر الكروت</h3>
+      <button class="btn secondary" onclick="loadCards()">تحديث</button>
+    </div>
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>العميل</th>
+            <th>السعر</th>
+            <th>المدة</th>
+            <th>السرعة</th>
+            <th>التاريخ</th>
+          </tr>
+        </thead>
+
+        <tbody id="cardsTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ROUTERS -->
+
+<section class="page" id="routers">
+
+  <div class="grid">
+
+    <div class="panel">
+
+      <div class="panelHeader">
+        <h3>📡 إضافة MikroTik</h3>
+      </div>
+
+      <div class="formGrid">
+
+        <div class="field">
+          <label>اسم الراوتر</label>
+          <input id="routerName" placeholder="الراوتر الرئيسي">
+        </div>
+
+        <div class="field">
+          <label>IP / Host</label>
+          <input id="routerHost" placeholder="192.168.88.1">
+        </div>
+
+        <div class="field">
+          <label>Username</label>
+          <input id="routerUsername" placeholder="admin">
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input id="routerPassword" type="password">
+        </div>
+
+        <div class="field">
+          <label>Port</label>
+          <input id="routerPort" type="number" placeholder="80" value="80">
+        </div>
+
+        <div class="field">
+          <label>الاتصال الآمن</label>
+          <select id="routerSecure">
+            <option value="false">HTTP</option>
+            <option value="true">HTTPS</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="actions">
+
+        <button class="btn cyan" onclick="testRouter()">
+          🔌 اختبار الاتصال
+        </button>
+
+        <button class="btn green" onclick="saveRouter()">
+          💾 تحقق واحفظ
+        </button>
+
+      </div>
+
+      <div id="routerStatus" class="status">
+        أدخل بيانات MikroTik ثم اختبر الاتصال.
+      </div>
+
+    </div>
+
+
+    <div class="panel">
+
+      <div class="panelHeader">
+        <h3>🔐 أمان الاتصال</h3>
+      </div>
+
+      <p style="color:var(--muted);line-height:1.9;font-size:13px">
+        يتم إرسال بيانات MikroTik إلى الخادم للتعامل مع RouterOS.
+        كلمة المرور لا يتم عرضها ضمن قائمة الأجهزة.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="panel" style="margin-top:17px">
+
+    <div class="panelHeader">
+      <h3>📡 أجهزتك</h3>
+      <button class="btn secondary" onclick="loadRouters()">تحديث</button>
+    </div>
+
+    <div id="routersList"></div>
+
+  </div>
+
+</section>
+
+
+<!-- EXPENSES -->
+
+<section class="page" id="expenses">
+
+  <div class="grid">
+
+    <div class="panel">
+
+      <div class="panelHeader">
+        <h3>💰 تسجيل مخروجات</h3>
+      </div>
+
+      <div class="formGrid">
+
+        <div class="field">
+          <label>اسم الوكيل / المستلم</label>
+          <input id="expenseAgent" placeholder="اسم الشخص">
+        </div>
+
+        <div class="field">
+          <label>عدد فئة 100</label>
+          <input id="q100" type="number" value="0">
+        </div>
+
+        <div class="field">
+          <label>عدد فئة 200</label>
+          <input id="q200" type="number" value="0">
+        </div>
+
+        <div class="field">
+          <label>عدد فئة 300</label>
+          <input id="q300" type="number" value="0">
+        </div>
+
+        <div class="field">
+          <label>كمية أخرى</label>
+          <input id="otherQty" type="number" value="0">
+        </div>
+
+        <div class="field">
+          <label>سعر الكمية الأخرى</label>
+          <input id="otherPrice" type="number" value="0">
+        </div>
+
+      </div>
+
+      <div class="field" style="margin-top:12px">
+        <label>ملاحظات</label>
+        <textarea id="expenseNote" rows="3"></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn red" onclick="createExpense()">
+          إضافة المخروج
+        </button>
+      </div>
+
+      <div id="expenseStatus" class="status">
+        أدخل بيانات المخروج.
+      </div>
+
+    </div>
+
+
+    <div class="panel">
+
+      <div class="panelHeader">
+        <h3>📊 الإجمالي</h3>
+      </div>
+
+      <div style="text-align:center;padding:25px">
+        <strong id="expenseTotalBig" style="font-size:38px">
+          0
+        </strong>
+
+        <div style="color:var(--muted);margin-top:6px">
+          إجمالي المخروجات
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="panel" style="margin-top:17px">
+
+    <div class="panelHeader">
+      <h3>📋 سجل المخروجات</h3>
+      <button class="btn secondary" onclick="loadExpenses()">تحديث</button>
+    </div>
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>المستلم</th>
+            <th>100</th>
+            <th>200</th>
+            <th>300</th>
+            <th>الإجمالي</th>
+            <th>التاريخ</th>
+          </tr>
+        </thead>
+
+        <tbody id="expensesTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- AI -->
+
+<section class="page" id="ai">
+
+  <div class="panel ai">
+
+    <div class="aiTitle">
+      <div class="aiIcon">✨</div>
+
+      <div>
+        <h3>مساعد شبكتي AI</h3>
+        <small style="color:var(--muted)">
+          مركز التحليل الذكي
+        </small>
+      </div>
+    </div>
+
+    <div class="formGrid">
+
+      <div class="field">
+        <label>اكتب سؤالك</label>
+        <input
+          id="aiQuestion"
+          placeholder="كم عندي كرت؟ كم أرباحي؟"
+        >
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="askAI()">
+        🤖 تحليل البيانات
+      </button>
+    </div>
+
+    <div class="status aiResponse" id="aiResponse">
+      مساعد شبكتي جاهز لتحليل بياناتك الموجودة في النظام.
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+const API = "";
+
+let cards = [];
+let routers = [];
+let expenses = [];
+
+
+/* ---------------- NAVIGATION ---------------- */
+
+function showPage(name,btn){
+
+  document.querySelectorAll(".page")
+    .forEach(x=>x.classList.remove("active"));
+
+  document.getElementById(name)
+    .classList.add("active");
+
+  document.querySelectorAll(".nav button")
+    .forEach(x=>x.classList.remove("active"));
+
+  if(btn) btn.classList.add("active");
+
+  const titles={
+    dashboard:"لوحة التحكم",
+    smart:"بحث الكرت الذكي",
+    cards:"إدارة الكروت",
+    routers:"أجهزة MikroTik",
+    expenses:"المخروجات",
+    ai:"مساعد شبكتي AI"
+  };
+
+  document.getElementById("pageTitle").textContent=titles[name]||"شبكتي بلس";
+
+  document.getElementById("sidebar").classList.remove("open");
+
+}
+
+function showPageByName(name){
+
+  const btn=[...document.querySelectorAll(".nav button")]
+    .find(x=>x.getAttribute("onclick")?.includes("'"+name+"'"));
+
+  showPage(name,btn);
+
+}
+
+function toggleMenu(){
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+
+/* ---------------- HELPERS ---------------- */
+
+function toast(message){
+
+  const el=document.getElementById("toast");
+
+  el.textContent=message;
+  el.style.display="block";
+
+  setTimeout(()=>{
+    el.style.display="none";
+  },3000);
+}
+
+function money(n){
+  return Number(n||0).toLocaleString("ar-YE")+" ريال";
+}
+
+async function api(url,options={}){
+
+  const res=await fetch(API+url,{
+    ...options,
+    headers:{
+      "Content-Type":"application/json",
+      ...(options.headers||{})
+    }
+  });
+
+  const data=await res.json().catch(()=>({}));
+
+  if(!res.ok){
+    throw new Error(data.message||"حدث خطأ في الخادم");
+  }
+
+  return data;
+}
+
+
+/* ---------------- HEALTH ---------------- */
+
+async function checkHealth(){
+
+  try{
+
+    const data=await api("/api/health");
+
+    if(data.ok){
+      console.log("SHABAKATY PLUS API ONLINE");
+    }
+
+  }catch(e){
+
+    console.error(e);
+
+  }
+
+}
+
+
+/* ---------------- CARDS ---------------- */
+
+async function loadCards(){
+
+  try{
+
+    const data=await api("/api/cards");
+
+    cards=data.cards||[];
+
+    renderCards();
+    searchCards();
+    updateStats();
+
+  }catch(e){
+
+    toast("تعذر تحميل الكروت: "+e.message);
+
+  }
+
+}
+
+function renderCards(){
+
+  const table=document.getElementById("cardsTable");
+
+  document.getElementById("inventoryCount")
+    .textContent=cards.length;
+
+  if(!cards.length){
+
+    table.innerHTML=
+      `<tr><td colspan="7" class="empty">لا توجد كروت حتى الآن</td></tr>`;
+
+    return;
+  }
+
+  table.innerHTML=cards.map(c=>`
+
+    <tr>
+
+      <td>${c.id}</td>
+
+      <td>
+        <strong>${escapeHtml(c.username)}</strong>
+      </td>
+
+      <td>${escapeHtml(c.customer||"-")}</td>
+
+      <td>${money(c.price)}</td>
+
+      <td>${escapeHtml(c.duration||"-")}</td>
+
+      <td>${escapeHtml(c.speed||"-")}</td>
+
+      <td>${formatDate(c.created_at)}</td>
+
+    </tr>
+
+  `).join("");
+
+}
+
+function searchCards(){
+
+  const q=(document.getElementById("smartSearch")?.value||"")
+    .trim()
+    .toLowerCase();
+
+  const result=cards.filter(c=>
+    !q ||
+    String(c.username||"").toLowerCase().includes(q) ||
+    String(c.customer||"").toLowerCase().includes(q) ||
+    String(c.id).includes(q)
+  );
+
+  const table=document.getElementById("smartResults");
+
+  if(!result.length){
+
+    table.innerHTML=
+      `<tr><td colspan="7" class="empty">لم يتم العثور على كرت</td></tr>`;
+
+    return;
+
+  }
+
+  table.innerHTML=result.map(c=>`
+
+    <tr>
+
+      <td>${escapeHtml(c.username)}</td>
+
+      <td>${escapeHtml(c.customer||"-")}</td>
+
+      <td>${escapeHtml(c.duration||"-")}</td>
+
+      <td>${escapeHtml(c.speed||"-")}</td>
+
+      <td>${money(c.price)}</td>
+
+      <td>${formatDate(c.created_at)}</td>
+
+      <td>
+        <span class="badge green">مسجل</span>
+      </td>
+
+    </tr>
+
+  `).join("");
+
+}
+
+function generateCard(){
+
+  const random=Math.floor(100000+Math.random()*900000);
+
+  document.getElementById("cardUsername").value="card"+random;
+  document.getElementById("cardPassword").value=
+    Math.random().toString(36).slice(2,8).toUpperCase();
+
+  toast("تم توليد بيانات الكرت");
+
+}
+
+async function createCard(){
+
+  const username=document.getElementById("cardUsername").value.trim();
+  const password=document.getElementById("cardPassword").value.trim();
+
+  if(!username||!password){
+
+    setStatus("cardStatus","أدخل Username وكلمة المرور","bad");
+    return;
+
+  }
+
+  try{
+
+    const data=await api("/api/cards",{
+      method:"POST",
+      body:JSON.stringify({
+
+        username,
+        password,
+
+        customer:
+          document.getElementById("cardCustomer").value,
+
+        price:
+          Number(document.getElementById("cardPrice").value||0),
+
+        duration:
+          document.getElementById("cardDuration").value,
+
+        speed:
+          document.getElementById("cardSpeed").value
+
+      })
+    });
+
+    setStatus(
+      "cardStatus",
+      "تم إنشاء الكرت بنجاح رقم "+data.id,
+      "ok"
+    );
+
+    await loadCards();
+
+    document.getElementById("cardUsername").value="";
+    document.getElementById("cardPassword").value="";
+
+  }catch(e){
+
+    setStatus("cardStatus",e.message,"bad");
+
+  }
+
+}
+
+
+/* ---------------- ROUTERS ---------------- */
+
+function routerData(){
+
+  return {
+
+    name:
+      document.getElementById("routerName").value.trim(),
+
+    host:
+      document.getElementById("routerHost").value.trim(),
+
+    username:
+      document.getElementById("routerUsername").value.trim(),
+
+    password:
+      document.getElementById("routerPassword").value,
+
+    port:
+      Number(document.getElementById("routerPort").value||80),
+
+    secure:
+      document.getElementById("routerSecure").value==="true"
+
+  };
+
+}
+
+async function testRouter(){
+
+  const data=routerData();
+
+  try{
+
+    setStatus(
+      "routerStatus",
+      "جاري اختبار الاتصال بـ MikroTik...",
+      ""
+    );
+
+    const result=await api("/api/mikrotik/test",{
+      method:"POST",
+      body:JSON.stringify(data)
+    });
+
+    setStatus(
+      "routerStatus",
+      result.message+
+      (result.router?.version
+        ?" — RouterOS "+result.router.version
+        :""),
+      "ok"
+    );
+
+  }catch(e){
+
+    setStatus(
+      "routerStatus",
+      e.message,
+      "bad"
+    );
+
+  }
+
+}
+
+async function saveRouter(){
+
+  const data=routerData();
+
+  try{
+
+    setStatus(
+      "routerStatus",
+      "جاري التحقق والحفظ...",
+      ""
+    );
+
+    const result=await api("/api/mikrotik/save",{
+      method:"POST",
+      body:JSON.stringify(data)
+    });
+
+    setStatus(
+      "routerStatus",
+      result.message,
+      "ok"
+    );
+
+    await loadRouters();
+
+  }catch(e){
+
+    setStatus(
+      "routerStatus",
+      e.message,
+      "bad"
+    );
+
+  }
+
+}
+
+async function loadRouters(){
+
+  try{
+
+    const data=await api("/api/mikrotik/routers");
+
+    routers=data.routers||[];
+
+    renderRouters();
+
+  }catch(e){
+
+    document.getElementById("routersList").innerHTML=
+      `<div class="empty">تعذر تحميل الأجهزة</div>`;
+
+  }
+
+}
+
+function renderRouters(){
+
+  const box=document.getElementById("routersList");
+  const dash=document.getElementById("dashboardRouters");
+
+  if(!routers.length){
+
+    box.innerHTML=
+      `<div class="empty">لم تتم إضافة أي راوتر.</div>`;
+
+    dash.innerHTML=
+      `<div class="empty">لم تتم إضافة أي راوتر.</div>`;
+
+    return;
+
+  }
+
+  const html=routers.map(r=>`
+
+    <div class="routerCard">
+
+      <div class="routerInfo">
+
+        <strong>📡 ${escapeHtml(r.name)}</strong>
+
+        <small>
+          ${escapeHtml(r.host)}:${r.port}
+          • ${r.secure?"HTTPS":"HTTP"}
+        </small>
+
+        <small>
+          المستخدم: ${escapeHtml(r.username)}
+        </small>
+
+      </div>
+
+      <span class="badge green">
+        محفوظ
+      </span>
+
+    </div>
+
+  `).join("");
+
+  box.innerHTML=html;
+  dash.innerHTML=html;
+
+}
+
+
+/* ---------------- EXPENSES ---------------- */
+
+async function loadExpenses(){
+
+  try{
+
+    const data=await api("/api/expenses");
+
+    expenses=data.expenses||[];
+
+    renderExpenses();
+    updateStats();
+
+  }catch(e){
+
+    toast("تعذر تحميل المخروجات");
+
+  }
+
+}
+
+function renderExpenses(){
+
+  const table=document.getElementById("expensesTable");
+
+  const total=expenses.reduce(
+    (sum,e)=>sum+Number(e.total_value||0),
+    0
+  );
+
+  document.getElementById("expenseTotalBig")
+    .textContent=money(total);
+
+  if(!expenses.length){
+
+    table.innerHTML=
+      `<tr><td colspan="7" class="empty">لا توجد مخروجات</td></tr>`;
+
+    return;
+
+  }
+
+  table.innerHTML=expenses.map(e=>`
+
+    <tr>
+
+      <td>${e.id}</td>
+      <td>${escapeHtml(e.agent)}</td>
+      <td>${e.q100}</td>
+      <td>${e.q200}</td>
+      <td>${e.q300}</td>
+      <td>${money(e.total_value)}</td>
+      <td>${formatDate(e.created_at)}</td>
+
+    </tr>
+
+  `).join("");
+
+}
+
+async function createExpense(){
+
+  const agent=
+    document.getElementById("expenseAgent").value.trim();
+
+  if(!agent){
+
+    setStatus(
+      "expenseStatus",
+      "أدخل اسم المستلم",
+      "bad"
+    );
+
+    return;
+
+  }
+
+  try{
+
+    const data=await api("/api/expenses",{
+      method:"POST",
+      body:JSON.stringify({
+
+        agent,
+
+        q100:Number(
+          document.getElementById("q100").value||0
+        ),
+
+        q200:Number(
+          document.getElementById("q200").value||0
+        ),
+
+        q300:Number(
+          document.getElementById("q300").value||0
+        ),
+
+        other_qty:Number(
+          document.getElementById("otherQty").value||0
+        ),
+
+        other_price:Number(
+          document.getElementById("otherPrice").value||0
+        ),
+
+        note:
+          document.getElementById("expenseNote").value
+
+      })
+    });
+
+    setStatus(
+      "expenseStatus",
+      "تم تسجيل المخروج: "+money(data.total),
+      "ok"
+    );
+
+    await loadExpenses();
+
+  }catch(e){
+
+    setStatus(
+      "expenseStatus",
+      e.message,
+      "bad"
+    );
+
+  }
+
+}
+
+
+/* ---------------- DASHBOARD ---------------- */
+
+function updateStats(){
+
+  const sales=cards.reduce(
+    (sum,c)=>sum+Number(c.price||0),
+    0
+  );
+
+  const exp=expenses.reduce(
+    (sum,e)=>sum+Number(e.total_value||0),
+    0
+  );
+
+  document.getElementById("totalCards")
+    .textContent=cards.length;
+
+  document.getElementById("totalSales")
+    .textContent=money(sales);
+
+  document.getElementById("totalExpenses")
+    .textContent=money(exp);
+
+  document.getElementById("netProfit")
+    .textContent=money(sales-exp);
+
+}
+
+
+/* ---------------- AI LOCAL ANALYSIS ---------------- */
+
+function analyzeDashboard(){
+
+  const sales=cards.reduce(
+    (s,c)=>s+Number(c.price||0),0
+  );
+
+  const exp=expenses.reduce(
+    (s,e)=>s+Number(e.total_value||0),0
+  );
+
+  const profit=sales-exp;
+
+  document.getElementById("dashboardAI").innerHTML=`
+
+    <strong style="color:white">
+      تحليل شبكتك:
+    </strong>
+
+    <br><br>
+
+    🎫 عدد الكروت المسجلة:
+    <strong>${cards.length}</strong>
+
+    <br>
+
+    💵 إجمالي المبيعات:
+    <strong>${money(sales)}</strong>
+
+    <br>
+
+    💰 المخروجات:
+    <strong>${money(exp)}</strong>
+
+    <br>
+
+    📈 صافي الربح:
+    <strong>${money(profit)}</strong>
+
+    <br><br>
+
+    ${
+      profit>0
+      ?"✅ وضعك المالي إيجابي حسب البيانات الحالية."
+      :"⚠️ راجع المبيعات والمخروجات لتحسين صافي الربح."
+    }
+
+  `;
+
+}
+
+function askAI(){
+
+  const q=document.getElementById("aiQuestion").value.trim();
+
+  const sales=cards.reduce(
+    (s,c)=>s+Number(c.price||0),0
+  );
+
+  const exp=expenses.reduce(
+    (s,e)=>s+Number(e.total_value||0),0
+  );
+
+  const profit=sales-exp;
+
+  let answer="";
+
+  if(!q){
+
+    answer=
+      "اكتب سؤالًا مثل: كم عندي كرت؟ أو كم أرباحي؟";
+
+  }else{
+
+    const lower=q.toLowerCase();
+
+    if(q.includes("كرت")||lower.includes("card")){
+
+      answer=
+        `🎫 لديك حاليًا ${cards.length} كرت مسجل في قاعدة البيانات.`;
+
+    }else if(
+      q.includes("ربح")||
+      q.includes("أرباح")
+    ){
+
+      answer=
+        `📈 صافي الربح المحسوب حاليًا هو ${money(profit)}.`;
+
+    }else if(
+      q.includes("مبيعات")||
+      q.includes("بيع")
+    ){
+
+      answer=
+        `💵 إجمالي قيمة المبيعات المسجلة ${money(sales)}.`;
+
+    }else if(
+      q.includes("مخروج")||
+      q.includes("مصروف")
+    ){
+
+      answer=
+        `💰 إجمالي المخروجات ${money(exp)}.`;
+
+    }else if(
+      q.includes("راوتر")||
+      q.includes("روتر")
+    ){
+
+      answer=
+        `📡 لديك ${routers.length} جهاز MikroTik محفوظ.`;
+
+    }else{
+
+      answer=
+        `🤖 حسب البيانات الحالية: لديك ${cards.length} كرت، ومبيعات بقيمة ${money(sales)}، ومخروجات ${money(exp)}، وصافي ربح ${money(profit)}.`;
+
+    }
+
+  }
+
+  document.getElementById("aiResponse").innerHTML=answer;
+
+}
+
+
+/* ---------------- UTILITIES ---------------- */
+
+function setStatus(id,text,type){
+
+  const el=document.getElementById(id);
+
+  el.textContent=text;
+
+  el.className="status "+(type||"");
+
+}
+
+function formatDate(value){
+
+  if(!value)return "-";
+
+  try{
+    return new Date(value).toLocaleString("ar-YE");
+  }catch{
+    return value;
+  }
+
+}
+
+function escapeHtml(value){
+
+  return String(value??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* ---------------- START ---------------- */
+
+async function start(){
+
+  await checkHealth();
+
+  await Promise.all([
+    loadCards(),
+    loadExpenses(),
+    loadRouters()
+  ]);
+
+}
+
+start();
+
+</script>
+
+</body>
+</html>
