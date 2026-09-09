@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#070817">
+<title>SHABAKATY PLUS</title>
+
+<style>
+:root{
+  --bg:#070817;
+  --panel:#0e1124;
+  --panel2:#13172e;
+  --line:#272d4c;
+  --purple:#7c5cff;
+  --cyan:#20d7e8;
+  --green:#22d69b;
+  --red:#ff5577;
+  --yellow:#ffc857;
+  --text:#f7f8ff;
+  --muted:#8d94b5;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Arial,"Tahoma",sans-serif;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(124,92,255,.18),transparent 35%),
+    radial-gradient(circle at 10% 30%,rgba(32,215,232,.08),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+button,input,select,textarea{font:inherit}
+
+button{
+  cursor:pointer;
+  border:0;
+}
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:270px;
+  background:rgba(10,12,29,.96);
+  border-left:1px solid var(--line);
+  padding:22px 15px;
+  position:fixed;
+  right:0;
+  top:0;
+  bottom:0;
+  z-index:100;
+  overflow:auto;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:5px 8px 25px;
+}
+
+.logoIcon{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:27px;
+  font-weight:bold;
+  box-shadow:0 0 30px rgba(124,92,255,.35);
+}
+
+.logoText b{
+  display:block;
+  font-size:18px;
+}
+
+.logoText span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.navTitle{
+  color:#666d8e;
+  font-size:11px;
+  padding:10px 12px;
+}
+
+.nav button{
+  width:100%;
+  padding:13px 15px;
+  margin:3px 0;
+  border-radius:13px;
+  background:transparent;
+  color:#b9bfd9;
+  text-align:right;
+  transition:.2s;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:linear-gradient(90deg,rgba(124,92,255,.22),rgba(124,92,255,.05));
+  color:#fff;
+}
+
+.nav button.active{
+  border-right:3px solid var(--purple);
+}
+
+.navIcon{
+  display:inline-block;
+  width:28px;
+}
+
+/* MAIN */
+
+.main{
+  width:calc(100% - 270px);
+  margin-right:270px;
+  padding:20px;
+}
+
+.topbar{
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.menuBtn{
+  display:none;
+  background:var(--panel);
+  color:white;
+  border:1px solid var(--line);
+  padding:12px;
+  border-radius:12px;
+}
+
+.topSearch{
+  width:min(440px,50%);
+}
+
+.topSearch input{
+  width:100%;
+  background:var(--panel);
+  border:1px solid var(--line);
+  color:white;
+  padding:13px 17px;
+  border-radius:14px;
+  outline:none;
+}
+
+.topActions{
+  display:flex;
+  gap:9px;
+}
+
+.iconBtn{
+  width:44px;
+  height:44px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  color:white;
+  border-radius:13px;
+  font-size:18px;
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--panel);
+  padding:7px 12px;
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.avatar{
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  font-weight:bold;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.hero{
+  background:
+    linear-gradient(135deg,rgba(124,92,255,.2),rgba(32,215,232,.05)),
+    var(--panel);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:27px;
+  margin-bottom:20px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:230px;
+  height:230px;
+  background:var(--purple);
+  filter:blur(100px);
+  opacity:.13;
+  left:-80px;
+  top:-100px;
+}
+
+.hero h1{
+  font-size:28px;
+  margin-bottom:9px;
+}
+
+.hero p{
+  color:var(--muted);
+}
+
+.heroActions{
+  margin-top:20px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:12px 18px;
+  border-radius:12px;
+  color:white;
+  background:var(--panel2);
+  border:1px solid var(--line);
+}
+
+.btn.primary{
+  background:linear-gradient(135deg,var(--purple),#5c43d9);
+  border:0;
+  box-shadow:0 8px 25px rgba(124,92,255,.25);
+}
+
+.btn.green{
+  background:linear-gradient(135deg,#16b984,#0e9e70);
+}
+
+.btn.red{
+  background:rgba(255,85,119,.12);
+  color:#ff8ca4;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.card{
+  background:rgba(14,17,36,.9);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:19px;
+}
+
+.stat{
+  position:relative;
+  overflow:hidden;
+}
+
+.stat .label{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.stat .number{
+  font-size:27px;
+  font-weight:bold;
+  margin-top:12px;
+}
+
+.stat .change{
+  margin-top:8px;
+  font-size:12px;
+  color:var(--green);
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:15px;
+}
+
+.cardTitle{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:17px;
+}
+
+.cardTitle h3{
+  font-size:16px;
+}
+
+.muted{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.chart{
+  height:220px;
+  display:flex;
+  align-items:end;
+  gap:12px;
+  padding:20px 10px 10px;
+}
+
+.bar{
+  flex:1;
+  min-width:8px;
+  border-radius:7px 7px 2px 2px;
+  background:linear-gradient(to top,var(--purple),var(--cyan));
+  opacity:.9;
+}
+
+.chartLabels{
+  display:flex;
+  justify-content:space-between;
+  color:#666d8e;
+  font-size:10px;
+}
+
+/* TABLE */
+
+.tableWrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+
+th,td{
+  padding:14px 10px;
+  border-bottom:1px solid var(--line);
+  text-align:right;
+  font-size:13px;
+}
+
+th{
+  color:#777f9f;
+  font-weight:normal;
+}
+
+.status{
+  display:inline-flex;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+}
+
+.status.online{
+  color:#47e6b1;
+  background:rgba(34,214,155,.1);
+}
+
+.status.offline{
+  color:#ff8198;
+  background:rgba(255,85,119,.1);
+}
+
+.status.wait{
+  color:#ffd878;
+  background:rgba(255,200,87,.1);
+}
+
+/* FORMS */
+
+.formGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.field label{
+  display:block;
+  color:#969dbc;
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  padding:12px;
+  background:#090c1d;
+  border:1px solid var(--line);
+  border-radius:11px;
+  color:white;
+  outline:none;
+}
+
+.field textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:17px;
+}
+
+/* CARDS */
+
+.cardsGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.networkCard{
+  background:
+    linear-gradient(135deg,rgba(124,92,255,.17),rgba(32,215,232,.04)),
+    var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+}
+
+.networkCard .big{
+  font-size:21px;
+  font-weight:bold;
+  letter-spacing:1px;
+  margin:15px 0;
+}
+
+.networkCard .row{
+  display:flex;
+  justify-content:space-between;
+  padding:7px 0;
+  color:#a3a9c3;
+  font-size:12px;
+}
+
+.searchBox{
+  margin-bottom:15px;
+}
+
+.searchBox input{
+  width:100%;
+  padding:14px;
+  border-radius:13px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  color:white;
+  outline:none;
+}
+
+/* ALERT */
+
+.alert{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px;
+  border-radius:14px;
+  background:rgba(255,200,87,.08);
+  border:1px solid rgba(255,200,87,.2);
+  color:#ffd878;
+  margin-bottom:15px;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  z-index:500;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalBox{
+  width:min(600px,100%);
+  background:#0d1023;
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:23px;
+  max-height:90vh;
+  overflow:auto;
+}
+
+.modalHeader{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.close{
+  background:transparent;
+  color:white;
+  font-size:24px;
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .grid2{
+    grid-template-columns:1fr;
+  }
+
+  .cardsGrid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:750px){
+  .sidebar{
+    transform:translateX(110%);
+    transition:.25s;
+    box-shadow:-20px 0 50px rgba(0,0,0,.4);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    width:100%;
+    margin-right:0;
+    padding:12px;
+  }
+
+  .menuBtn{
+    display:block;
+  }
+
+  .topbar{
+    gap:8px;
+  }
+
+  .topSearch{
+    width:100%;
+  }
+
+  .topActions .iconBtn{
+    display:none;
+  }
+
+  .profile span{
+    display:none;
+  }
+
+  .hero{
+    padding:20px;
+  }
+
+  .hero h1{
+    font-size:23px;
+  }
+
+  .stats{
+    gap:9px;
+  }
+
+  .stat{
+    padding:14px;
+  }
+
+  .stat .number{
+    font-size:22px;
+  }
+
+  .cardsGrid{
+    grid-template-columns:1fr;
+  }
+
+  .formGrid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+    <div class="logoIcon">ش</div>
+    <div class="logoText">
+      <b>SHABAKATY PLUS</b>
+      <span>شبكتك، أرباحك، بين يديك</span>
+    </div>
+  </div>
+
+  <div class="navTitle">الرئيسية</div>
+
+  <div class="nav">
+    <button class="active" onclick="showPage('dashboard',this)">
+      <span class="navIcon">⌂</span> لوحة التحكم
+    </button>
+
+    <button onclick="showPage('cards',this)">
+      <span class="navIcon">▣</span> الكروت
+    </button>
+
+    <button onclick="showPage('customers',this)">
+      <span class="navIcon">♙</span> العملاء
+    </button>
+
+    <button onclick="showPage('agents',this)">
+      <span class="navIcon">♧</span> الوكلاء
+    </button>
+
+    <button onclick="showPage('routers',this)">
+      <span class="navIcon">◉</span> الراوترات
+    </button>
+  </div>
+
+  <div class="navTitle">الإدارة</div>
+
+  <div class="nav">
+    <button onclick="showPage('sales',this)">
+      <span class="navIcon">↗</span> المبيعات
+    </button>
+
+    <button onclick="showPage('expenses',this)">
+      <span class="navIcon">↘</span> المخروجات
+    </button>
+
+    <button onclick="showPage('wallet',this)">
+      <span class="navIcon">◈</span> المحفظة
+    </button>
+
+    <button onclick="showPage('messages',this)">
+      <span class="navIcon">✉</span> الرسائل
+    </button>
+
+    <button onclick="showPage('settings',this)">
+      <span class="navIcon">⚙</span> الإعدادات
+    </button>
+  </div>
+
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<header class="topbar">
+
+  <button class="menuBtn" onclick="toggleSidebar()">☰</button>
+
+  <div class="topSearch">
+    <input id="globalSearch" placeholder="ابحث عن كرت، عميل، وكيل..." oninput="globalSearch()">
+  </div>
+
+  <div class="topActions">
+    <button class="iconBtn" onclick="openNotifications()">🔔</button>
+
+    <div class="profile">
+      <div class="avatar">م</div>
+      <span>المالك</span>
+    </div>
+  </div>
+
+</header>
+
+<!-- DASHBOARD -->
+<section class="page active" id="dashboard">
+
+  <div class="hero">
+    <h1>مرحباً بك في شبكتي بلس 👋</h1>
+    <p>تحكم في شبكتك ومبيعاتك وأرباحك من مكان واحد.</p>
+
+    <div class="heroActions">
+      <button class="btn primary" onclick="openModal('cardModal')">＋ إنشاء كروت</button>
+      <button class="btn" onclick="openModal('routerModal')">＋ إضافة روتر</button>
+      <button class="btn green" onclick="showPage('customers')">＋ إضافة عميل</button>
+    </div>
+  </div>
+
+  <div class="stats">
+
+    <div class="card stat">
+      <div class="label">إجمالي العملاء</div>
+      <div class="number" id="customersCount">248</div>
+      <div class="change">↑ 12% هذا الشهر</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">الكروت المتبقية</div>
+      <div class="number" id="cardsCount">1,250</div>
+      <div class="change">مخزون جيد</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">مبيعات الشهر</div>
+      <div class="number">385,000</div>
+      <div class="change">↑ 18.5%</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">صافي الأرباح</div>
+      <div class="number">214,500</div>
+      <div class="change">↑ 14.2%</div>
+    </div>
+
+  </div>
+
+  <div class="grid2">
+
+    <div class="card">
+      <div class="cardTitle">
+        <h3>تحليل المبيعات</h3>
+        <span class="muted">آخر 7 أيام</span>
+      </div>
+
+      <div class="chart">
+        <div class="bar" style="height:42%"></div>
+        <div class="bar" style="height:55%"></div>
+        <div class="bar" style="height:48%"></div>
+        <div class="bar" style="height:72%"></div>
+        <div class="bar" style="height:62%"></div>
+        <div class="bar" style="height:88%"></div>
+        <div class="bar" style="height:96%"></div>
+      </div>
+
+      <div class="chartLabels">
+        <span>السبت</span>
+        <span>الأحد</span>
+        <span>الإثنين</span>
+        <span>الثلاثاء</span>
+        <span>الأربعاء</span>
+        <span>الخميس</span>
+        <span>الجمعة</span>
+      </div>
+    </div>
+
+    <div class="card">
+
+      <div class="cardTitle">
+        <h3>حالة الراوترات</h3>
+        <span class="muted">3 أجهزة</span>
+      </div>
+
+      <table>
+        <tr>
+          <td>الفرع الرئيسي</td>
+          <td><span class="status online">● متصل</span></td>
+        </tr>
+        <tr>
+          <td>فرع السوق</td>
+          <td><span class="status online">● متصل</span></td>
+        </tr>
+        <tr>
+          <td>فرع الشارع العام</td>
+          <td><span class="status offline">● غير متصل</span></td>
+        </tr>
+      </table>
+
+      <br>
+
+      <button class="btn primary" onclick="showPage('routers')">
+        إدارة الراوترات
+      </button>
+
+    </div>
+
+  </div>
+
+  <br>
+
+  <div class="card">
+
+    <div class="cardTitle">
+      <h3>آخر العمليات</h3>
+      <span class="muted">اليوم</span>
+    </div>
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>العملية</th>
+            <th>المستخدم</th>
+            <th>المبلغ</th>
+            <th>الحالة</th>
+            <th>الوقت</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>بيع كرت</td>
+            <td>محمد أحمد</td>
+            <td>500 ريال</td>
+            <td><span class="status online">مكتملة</span></td>
+            <td>منذ 5 دقائق</td>
+          </tr>
+
+          <tr>
+            <td>تحويل كروت</td>
+            <td>الوكيل علي</td>
+            <td>50 كرت</td>
+            <td><span class="status online">تم التحويل</span></td>
+            <td>منذ 20 دقيقة</td>
+          </tr>
+
+          <tr>
+            <td>مصروف</td>
+            <td>كهرباء</td>
+            <td>15,000 ريال</td>
+            <td><span class="status wait">مراجعة</span></td>
+            <td>منذ ساعة</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CARDS -->
+<section class="page" id="cards">
+
+  <div class="hero">
+    <h1>إدارة الكروت 🎫</h1>
+    <p>إنشاء ومتابعة وبيع وطباعة الكروت بسهولة.</p>
+  </div>
+
+  <div class="alert">
+    ⚡ المخزون الحالي: <b>1,250 كرت</b> — يمكنك إنشاء دفعة جديدة.
+  </div>
+
+  <div class="card">
+
+    <div class="cardTitle">
+      <h3>بحث الكرت الذكي</h3>
+    </div>
+
+    <div class="searchBox">
+      <input id="cardSearch" placeholder="ابحث برقم الكرت أو Username أو رقم العميل..." oninput="searchCards()">
+    </div>
+
+    <div id="cardsList"></div>
+
+  </div>
+
+</section>
+
+
+<!-- CUSTOMERS -->
+<section class="page" id="customers">
+
+  <div class="hero">
+    <h1>العملاء 👥</h1>
+    <p>إدارة العملاء والاشتراكات وحالة الاتصال.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="cardTitle">
+      <h3>قائمة العملاء</h3>
+      <button class="btn primary" onclick="openModal('customerModal')">＋ إضافة عميل</button>
+    </div>
+
+    <div class="tableWrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>العميل</th>
+            <th>الهاتف</th>
+            <th>الباقة</th>
+            <th>الحالة</th>
+            <th>الانتهاء</th>
+          </tr>
+        </thead>
+
+        <tbody id="customersTable">
+          <tr>
+            <td>محمد أحمد</td>
+            <td>777123456</td>
+            <td>10 جيجا</td>
+            <td><span class="status online">متصل</span></td>
+            <td>25/09/2026</td>
+          </tr>
+
+          <tr>
+            <td>علي عبدالله</td>
+            <td>733456789</td>
+            <td>5 جيجا</td>
+            <td><span class="status offline">غير متصل</span></td>
+            <td>20/09/2026</td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- AGENTS -->
+<section class="page" id="agents">
+
+  <div class="hero">
+    <h1>الوكلاء 🤝</h1>
+    <p>تابع المبيعات والعمولات والأرصدة.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="cardTitle">
+      <h3>الوكلاء</h3>
+      <button class="btn primary">＋ إضافة وكيل</button>
+    </div>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>الوكيل</th>
+          <th>المبيعات</th>
+          <th>العمولة</th>
+          <th>الرصيد</th>
+          <th>الحالة</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>علي محمد</td>
+          <td>125,000 ريال</td>
+          <td>12,500 ريال</td>
+          <td>25,000 ريال</td>
+          <td><span class="status online">نشط</span></td>
+        </tr>
+
+        <tr>
+          <td>أحمد صالح</td>
+          <td>88,000 ريال</td>
+          <td>8,800 ريال</td>
+          <td>14,000 ريال</td>
+          <td><span class="status online">نشط</span></td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- ROUTERS -->
+<section class="page" id="routers">
+
+  <div class="hero">
+    <h1>الراوترات 🌐</h1>
+    <p>إدارة أجهزة MikroTik ومتابعة حالتها.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="cardTitle">
+      <h3>أجهزة الشبكة</h3>
+      <button class="btn primary" onclick="openModal('routerModal')">＋ إضافة روتر</button>
+    </div>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>الاسم</th>
+          <th>IP</th>
+          <th>الفرع</th>
+          <th>الحالة</th>
+          <th>الإجراء</th>
+        </tr>
+      </thead>
+
+      <tbody id="routersTable">
+
+        <tr>
+          <td>الراوتر الرئيسي</td>
+          <td>192.168.88.1</td>
+          <td>الرئيسي</td>
+          <td><span class="status online">● متصل</span></td>
+          <td><button class="btn">تفاصيل</button></td>
+        </tr>
+
+        <tr>
+          <td>راوتر السوق</td>
+          <td>192.168.10.1</td>
+          <td>السوق</td>
+          <td><span class="status online">● متصل</span></td>
+          <td><button class="btn">تفاصيل</button></td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- SALES -->
+<section class="page" id="sales">
+
+  <div class="hero">
+    <h1>المبيعات 📈</h1>
+    <p>تابع مبيعاتك وأرباحك اليومية والشهرية.</p>
+  </div>
+
+  <div class="stats">
+
+    <div class="card stat">
+      <div class="label">مبيعات اليوم</div>
+      <div class="number">18,500</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">مبيعات الشهر</div>
+      <div class="number">385,000</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">العمولات</div>
+      <div class="number">38,500</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">صافي الربح</div>
+      <div class="number">214,500</div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- EXPENSES -->
+<section class="page" id="expenses">
+
+  <div class="hero">
+    <h1>المخروجات 💸</h1>
+    <p>سجل المصروفات واحسب صافي الأرباح.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="cardTitle">
+      <h3>المصروفات</h3>
+      <button class="btn primary" onclick="openModal('expenseModal')">＋ إضافة مصروف</button>
+    </div>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>المصروف</th>
+          <th>التصنيف</th>
+          <th>المبلغ</th>
+          <th>التاريخ</th>
+        </tr>
+      </thead>
+
+      <tbody id="expensesTable">
+
+        <tr>
+          <td>كهرباء</td>
+          <td>خدمات</td>
+          <td>15,000</td>
+          <td>09/09/2026</td>
+        </tr>
+
+        <tr>
+          <td>صيانة</td>
+          <td>صيانة</td>
+          <td>8,000</td>
+          <td>07/09/2026</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- WALLET -->
+<section class="page" id="wallet">
+
+  <div class="hero">
+    <h1>المحفظة 💰</h1>
+    <p>إدارة الإيرادات والمصروفات وصافي الربح.</p>
+  </div>
+
+  <div class="stats">
+
+    <div class="card stat">
+      <div class="label">الرصيد</div>
+      <div class="number">214,500</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">الإيرادات</div>
+      <div class="number">385,000</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">المصروفات</div>
+      <div class="number">170,500</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">صافي الربح</div>
+      <div class="number">214,500</div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- MESSAGES -->
+<section class="page" id="messages">
+
+  <div class="hero">
+    <h1>الرسائل ✉️</h1>
+    <p>تواصل مع الوكلاء والعملاء من مكان واحد.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="cardTitle">
+      <h3>المحادثات</h3>
+      <button class="btn primary">＋ رسالة جديدة</button>
+    </div>
+
+    <table>
+
+      <tr>
+        <td>علي محمد</td>
+        <td>تم استلام الكروت الجديدة</td>
+        <td><span class="status online">مقروءة</span></td>
+      </tr>
+
+      <tr>
+        <td>أحمد صالح</td>
+        <td>احتاج دفعة كروت جديدة</td>
+        <td><span class="status wait">جديدة</span></td>
+      </tr>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- SETTINGS -->
+<section class="page" id="settings">
+
+  <div class="hero">
+    <h1>الإعدادات ⚙️</h1>
+    <p>تحكم في إعدادات حساب شبكتي بلس.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="formGrid">
+
+      <div class="field">
+        <label>اسم الشبكة</label>
+        <input value="شبكتي بلس">
+      </div>
+
+      <div class="field">
+        <label>اسم المالك</label>
+        <input value="المالك">
+      </div>
+
+      <div class="field">
+        <label>رقم الهاتف</label>
+        <input placeholder="رقم الهاتف">
+      </div>
+
+      <div class="field">
+        <label>العملة</label>
+        <select>
+          <option>ريال يمني</option>
+          <option>دولار أمريكي</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" onclick="saveSettings()">حفظ الإعدادات</button>
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+</div>
+
+
+<!-- ROUTER MODAL -->
+<div class="modal" id="routerModal">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+      <h2>إضافة روتر</h2>
+      <button class="close" onclick="closeModal('routerModal')">×</button>
+    </div>
+
+    <div class="formGrid">
+
+      <div class="field">
+        <label>اسم الروتر</label>
+        <input id="routerName" placeholder="الروتر الرئيسي">
+      </div>
+
+      <div class="field">
+        <label>عنوان IP</label>
+        <input id="routerIP" placeholder="192.168.88.1">
+      </div>
+
+      <div class="field">
+        <label>اسم المستخدم</label>
+        <input id="routerUser" placeholder="admin">
+      </div>
+
+      <div class="field">
+        <label>كلمة المرور</label>
+        <input id="routerPass" type="password">
+      </div>
+
+      <div class="field">
+        <label>المنفذ</label>
+        <input id="routerPort" value="443">
+      </div>
+
+      <div class="field">
+        <label>الفرع</label>
+        <input id="routerBranch" placeholder="الرئيسي">
+      </div>
+
+    </div>
+
+    <div class="actions">
+
+      <button class="btn primary" onclick="addRouter()">
+        حفظ الروتر
+      </button>
+
+      <button class="btn" onclick="closeModal('routerModal')">
+        إلغاء
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- CARD MODAL -->
+<div class="modal" id="cardModal">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+      <h2>إنشاء كروت</h2>
+      <button class="close" onclick="closeModal('cardModal')">×</button>
+    </div>
+
+    <div class="formGrid">
+
+      <div class="field">
+        <label>الباقة</label>
+        <select id="cardPackage">
+          <option>1 جيجا</option>
+          <option>5 جيجا</option>
+          <option>10 جيجا</option>
+          <option>20 جيجا</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>المدة</label>
+        <select id="cardDuration">
+          <option>يوم</option>
+          <option>7 أيام</option>
+          <option>30 يوم</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>السعر</label>
+        <input id="cardPrice" value="500">
+      </div>
+
+      <div class="field">
+        <label>الكمية</label>
+        <input id="cardQuantity" value="10" type="number">
+      </div>
+
+    </div>
+
+    <div class="actions">
+
+      <button class="btn primary" onclick="generateCards()">
+        إنشاء الكروت
+      </button>
+
+      <button class="btn" onclick="closeModal('cardModal')">
+        إلغاء
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- CUSTOMER MODAL -->
+<div class="modal" id="customerModal">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+      <h2>إضافة عميل</h2>
+      <button class="close" onclick="closeModal('customerModal')">×</button>
+    </div>
+
+    <div class="formGrid">
+
+      <div class="field">
+        <label>اسم العميل</label>
+        <input id="customerName">
+      </div>
+
+      <div class="field">
+        <label>رقم الهاتف</label>
+        <input id="customerPhone">
+      </div>
+
+      <div class="field">
+        <label>الباقة</label>
+        <input id="customerPackage" value="10 جيجا">
+      </div>
+
+      <div class="field">
+        <label>ملاحظات</label>
+        <input id="customerNotes">
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" onclick="addCustomer()">حفظ العميل</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- EXPENSE MODAL -->
+<div class="modal" id="expenseModal">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+      <h2>إضافة مصروف</h2>
+      <button class="close" onclick="closeModal('expenseModal')">×</button>
+    </div>
+
+    <div class="formGrid">
+
+      <div class="field">
+        <label>اسم المصروف</label>
+        <input id="expenseName" placeholder="كهرباء">
+      </div>
+
+      <div class="field">
+        <label>المبلغ</label>
+        <input id="expenseAmount" type="number">
+      </div>
+
+      <div class="field">
+        <label>التصنيف</label>
+        <select id="expenseCategory">
+          <option>كهرباء</option>
+          <option>إنترنت</option>
+          <option>صيانة</option>
+          <option>رواتب</option>
+          <option>معدات</option>
+          <option>مواصلات</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" onclick="addExpense()">حفظ المصروف</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+let cards = JSON.parse(localStorage.getItem("shabakaty_cards") || "[]");
+let customers = JSON.parse(localStorage.getItem("shabakaty_customers") || "[]");
+let routers = JSON.parse(localStorage.getItem("shabakaty_routers") || "[]");
+let expenses = JSON.parse(localStorage.getItem("shabakaty_expenses") || "[]");
+
+
+function saveData(){
+  localStorage.setItem("shabakaty_cards",JSON.stringify(cards));
+  localStorage.setItem("shabakaty_customers",JSON.stringify(customers));
+  localStorage.setItem("shabakaty_routers",JSON.stringify(routers));
+  localStorage.setItem("shabakaty_expenses",JSON.stringify(expenses));
+}
+
+
+function showPage(id,btn){
+
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
+
+  const page=document.getElementById(id);
+
+  if(page) page.classList.add("active");
+
+  document.querySelectorAll(".nav button").forEach(b=>{
+    b.classList.remove("active");
+  });
+
+  if(btn) btn.classList.add("active");
+
+  document.getElementById("sidebar").classList.remove("open");
+
+  if(id==="cards") renderCards();
+  if(id==="customers") renderCustomers();
+  if(id==="routers") renderRouters();
+  if(id==="expenses") renderExpenses();
+}
+
+
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+
+function openModal(id){
+  document.getElementById(id).classList.add("show");
+}
+
+
+function closeModal(id){
+  document.getElementById(id).classList.remove("show");
+}
+
+
+function generateCode(length=8){
+
+  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+  let result="";
+
+  for(let i=0;i<length;i++){
+    result+=chars[Math.floor(Math.random()*chars.length)];
+  }
+
+  return result;
+}
+
+
+function generateCards(){
+
+  let quantity=parseInt(document.getElementById("cardQuantity").value)||1;
+
+  quantity=Math.min(quantity,1000);
+
+  const pack=document.getElementById("cardPackage").value;
+  const duration=document.getElementById("cardDuration").value;
+  const price=document.getElementById("cardPrice").value;
+
+  for(let i=0;i<quantity;i++){
+
+    const username=generateCode(8);
+
+    cards.push({
+      id:Date.now()+"_"+i,
+      number:generateCode(10),
+      username:username,
+      password:generateCode(6),
+      package:pack,
+      duration:duration,
+      price:price,
+      status:"غير مستخدم",
+      created:new Date().toLocaleDateString("ar-YE")
+    });
+
+  }
+
+  saveData();
+
+  closeModal("cardModal");
+
+  renderCards();
+
+  alert("تم إنشاء "+quantity+" كرت بنجاح ✅");
+
+  showPage("cards");
+
+}
+
+
+function renderCards(){
+
+  const box=document.getElementById("cardsList");
+
+  if(!box)return;
+
+  if(cards.length===0){
+
+    box.innerHTML=`
+      <div class="muted">
+        لا توجد كروت منشأة حتى الآن.
+      </div>
+    `;
+
+    return;
+  }
+
+  box.innerHTML=cards.slice(-30).reverse().map(c=>`
+
+    <div class="networkCard" style="margin-bottom:10px">
+
+      <div class="row">
+        <span>رقم الكرت</span>
+        <b>${c.number}</b>
+      </div>
+
+      <div class="row">
+        <span>Username</span>
+        <b>${c.username}</b>
+      </div>
+
+      <div class="row">
+        <span>Password</span>
+        <b>${c.password}</b>
+      </div>
+
+      <div class="row">
+        <span>الباقة</span>
+        <span>${c.package}</span>
+      </div>
+
+      <div class="row">
+        <span>الحالة</span>
+        <span class="status online">${c.status}</span>
+      </div>
+
+      <div class="actions">
+
+        <button class="btn" onclick="copyText('${c.username}')">
+          نسخ Username
+        </button>
+
+        <button class="btn" onclick="copyText('${c.password}')">
+          نسخ Password
+        </button>
+
+        <button class="btn red" onclick="deleteCard('${c.id}')">
+          حذف
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+function searchCards(){
+
+  const q=document.getElementById("cardSearch").value.toLowerCase().trim();
+
+  const box=document.getElementById("cardsList");
+
+  const results=cards.filter(c=>
+    c.number.toLowerCase().includes(q) ||
+    c.username.toLowerCase().includes(q) ||
+    c.password.toLowerCase().includes(q)
+  );
+
+  if(results.length===0){
+
+    box.innerHTML=`<div class="muted">لا توجد نتائج.</div>`;
+
+    return;
+  }
+
+  box.innerHTML=results.map(c=>`
+
+    <div class="networkCard" style="margin-bottom:10px">
+
+      <div class="big">${c.number}</div>
+
+      <div class="row">
+        <span>Username</span>
+        <b>${c.username}</b>
+      </div>
+
+      <div class="row">
+        <span>Password</span>
+        <b>${c.password}</b>
+      </div>
+
+      <div class="row">
+        <span>الحالة</span>
+        <span class="status online">${c.status}</span>
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+function deleteCard(id){
+
+  if(!confirm("هل تريد حذف الكرت؟"))return;
+
+  cards=cards.filter(c=>c.id!==id);
+
+  saveData();
+
+  renderCards();
+
+}
+
+
+function addCustomer(){
+
+  const name=document.getElementById("customerName").value.trim();
+
+  if(!name){
+
+    alert("اكتب اسم العميل");
+
+    return;
+  }
+
+  customers.push({
+    id:Date.now(),
+    name:name,
+    phone:document.getElementById("customerPhone").value,
+    package:document.getElementById("customerPackage").value,
+    notes:document.getElementById("customerNotes").value,
+    status:"غير متصل",
+    expiry:"غير محدد"
+  });
+
+  saveData();
+
+  closeModal("customerModal");
+
+  renderCustomers();
+
+  alert("تمت إضافة العميل ✅");
+
+}
+
+
+function renderCustomers(){
+
+  const table=document.getElementById("customersTable");
+
+  if(!table)return;
+
+  table.innerHTML=customers.map(c=>`
+
+    <tr>
+
+      <td>${c.name}</td>
+
+      <td>${c.phone || "-"}</td>
+
+      <td>${c.package}</td>
+
+      <td>
+        <span class="status offline">${c.status}</span>
+      </td>
+
+      <td>${c.expiry}</td>
+
+    </tr>
+
+  `).join("");
+
+  document.getElementById("customersCount").textContent=
+    248+customers.length;
+
+}
+
+
+function addRouter(){
+
+  const name=document.getElementById("routerName").value.trim();
+  const ip=document.getElementById("routerIP").value.trim();
+
+  if(!name || !ip){
+
+    alert("اكتب اسم الروتر و IP");
+
+    return;
+  }
+
+  routers.push({
+    id:Date.now(),
+    name:name,
+    ip:ip,
+    user:document.getElementById("routerUser").value,
+    port:document.getElementById("routerPort").value,
+    branch:document.getElementById("routerBranch").value,
+    status:"غير مختبر"
+  });
+
+  saveData();
+
+  closeModal("routerModal");
+
+  renderRouters();
+
+  alert("تم حفظ الروتر محلياً ✅");
+
+}
+
+
+function renderRouters(){
+
+  const table=document.getElementById("routersTable");
+
+  if(!table)return;
+
+  const saved=routers.map(r=>`
+
+    <tr>
+
+      <td>${r.name}</td>
+      <td>${r.ip}</td>
+      <td>${r.branch || "-"}</td>
+
+      <td>
+        <span class="status wait">${r.status}</span>
+      </td>
+
+      <td>
+        <button class="btn" onclick="alert('الربط الحقيقي مع MikroTik يحتاج Backend')">
+          اختبار
+        </button>
+      </td>
+
+    </tr>
+
+  `).join("");
+
+  table.innerHTML+=saved;
+
+}
+
+
+function addExpense(){
+
+  const name=document.getElementById("expenseName").value.trim();
+
+  const amount=document.getElementById("expenseAmount").value;
+
+  if(!name || !amount){
+
+    alert("أدخل اسم المصروف والمبلغ");
+
+    return;
+  }
+
+  expenses.push({
+    id:Date.now(),
+    name:name,
+    amount:amount,
+    category:document.getElementById("expenseCategory").value,
+    date:new Date().toLocaleDateString("ar-YE")
+  });
+
+  saveData();
+
+  closeModal("expenseModal");
+
+  renderExpenses();
+
+  alert("تم تسجيل المصروف ✅");
+
+}
+
+
+function renderExpenses(){
+
+  const table=document.getElementById("expensesTable");
+
+  if(!table)return;
+
+  table.innerHTML=expenses.map(e=>`
+
+    <tr>
+
+      <td>${e.name}</td>
+      <td>${e.category}</td>
+      <td>${Number(e.amount).toLocaleString()}</td>
+      <td>${e.date}</td>
+
+    </tr>
+
+  `).join("");
+
+}
+
+
+function copyText(text){
+
+  navigator.clipboard.writeText(text);
+
+  alert("تم النسخ ✅");
+
+}
+
+
+function globalSearch(){
+
+  const q=document.getElementById("globalSearch").value.trim();
+
+  if(!q)return;
+
+  const card=cards.find(c=>
+    c.number.includes(q) ||
+    c.username.toLowerCase().includes(q.toLowerCase())
+  );
+
+  if(card){
+
+    showPage("cards");
+
+    document.getElementById("cardSearch").value=q;
+
+    searchCards();
+
+  }
+
+}
+
+
+function openNotifications(){
+
+  alert(
+`🔔 الإشعارات
+
+• مخزون الكروت جيد
+• يوجد راوتر غير متصل
+• لديك مبيعات جديدة
+• لا توجد مشاكل حرجة`
+  );
+
+}
+
+
+function saveSettings(){
+
+  alert("تم حفظ الإعدادات ✅");
+
+}
+
+
+document.addEventListener("click",function(e){
+
+  if(e.target.classList.contains("modal")){
+
+    e.target.classList.remove("show");
+
+  }
+
+});
+
+
+renderCards();
+
+</script>
+
+</body>
+</html>
